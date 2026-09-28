@@ -1,6 +1,6 @@
-# Nqarchitects Website
+# NQArchitects Website
 
-Responsive website for **Nqarchitects** — architecture and interior design studio based in DHA, Lahore.
+Responsive website for **NQArchitects** — architecture and interior design studio based in DHA, Lahore.
 
 Built with **React + Vite + Tailwind CSS**.
 

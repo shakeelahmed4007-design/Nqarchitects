@@ -1,6 +1,16 @@
 import { useEffect, useRef, useState, useCallback } from 'react'
 import { useLanguage } from '../Language.jsx'
-import { MessageCircle, Send, Minus, X, Phone, ChevronDown } from 'lucide-react'
+import { MessageCircle, Send, Minus, X, ChevronDown } from 'lucide-react'
+
+/* WhatsApp SVG Icon */
+function WhatsAppIcon({ size = 22 }) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M16 3C9.373 3 4 8.373 4 15c0 2.385.668 4.61 1.832 6.504L4 29l7.697-1.807A11.94 11.94 0 0 0 16 28c6.627 0 12-5.373 12-12S22.627 3 16 3Z" fill="white"/>
+      <path d="M22.003 18.917c-.3-.15-1.77-.873-2.044-.972-.274-.1-.473-.15-.672.15-.2.3-.772.972-.946 1.172-.174.2-.348.224-.647.075-.3-.15-1.265-.466-2.41-1.484-.891-.793-1.492-1.773-1.667-2.073-.174-.3-.018-.462.131-.61.134-.134.3-.348.449-.523.15-.174.2-.299.3-.498.1-.2.05-.374-.025-.523-.075-.15-.672-1.62-.921-2.218-.243-.582-.49-.503-.672-.513l-.573-.01c-.2 0-.523.075-.797.374-.274.3-1.046 1.022-1.046 2.491s1.071 2.89 1.22 3.089c.15.2 2.108 3.217 5.108 4.511.713.308 1.27.492 1.704.63.716.228 1.368.196 1.883.119.574-.086 1.77-.724 2.02-1.422.248-.698.248-1.297.173-1.422-.074-.125-.273-.2-.572-.35Z" fill="#25D366"/>
+    </svg>
+  )
+}
 
 /* ─── Knowledge base ─────────────────────────────────────── */
 const KB_EN = [
@@ -272,9 +282,23 @@ export default function Chat() {
           60% { transform: scale(0.92); }
         }
         .chat-badge-bounce { animation: chatBounce 0.5s ease-out; }
+        @keyframes waPulse {
+          0%, 100% { box-shadow: 0 0 0 0 rgba(37,211,102,0.55); }
+          60% { box-shadow: 0 0 0 12px rgba(37,211,102,0); }
+        }
+        .wa-pulse { animation: waPulse 2.2s ease-out infinite; }
+        .wa-tooltip {
+          opacity: 0; pointer-events: none;
+          transform: translateX(6px);
+          transition: opacity 0.2s, transform 0.2s;
+        }
+        .wa-btn:hover .wa-tooltip {
+          opacity: 1; pointer-events: auto;
+          transform: translateX(0);
+        }
       `}</style>
 
-      <div className="fixed z-50 bottom-5 right-4 md:bottom-7 md:right-7 flex flex-col items-end">
+      <div className="fixed z-50 bottom-5 right-4 md:bottom-7 md:right-7 flex flex-col items-end gap-3">
 
         {/* ── Chat panel ── */}
         {open && (
@@ -285,7 +309,7 @@ export default function Chat() {
               maxHeight: 'min(540px, calc(100dvh - 120px))',
             }}
             role="region"
-            aria-label="Nqarchitects live chat"
+            aria-label="NQArchitects live chat"
           >
             {/* Header */}
             <div className="bg-forest text-white px-4 py-3.5 flex items-center justify-between shrink-0">
@@ -412,7 +436,7 @@ export default function Chat() {
                   rel="noreferrer"
                   className="flex items-center justify-center gap-2 py-2.5 bg-[#25d366] text-white text-xs font-semibold hover:bg-[#1ebe5d] transition shrink-0"
                 >
-                  <Phone size={13} />
+                  <WhatsAppIcon size={15} />
                   {lang === 'ES' ? 'Abrir en WhatsApp' : 'Continue on WhatsApp'}
                 </a>
               </>
@@ -420,7 +444,24 @@ export default function Chat() {
           </div>
         )}
 
-        {/* ── Toggle button ── */}
+        {/* ── WhatsApp floating button ── */}
+        <div className="wa-btn relative flex items-center justify-end">
+          {/* Tooltip */}
+          <span className="wa-tooltip absolute right-full mr-3 whitespace-nowrap bg-[#1a1a1a] text-white text-xs font-medium px-3 py-1.5 rounded-full shadow-lg">
+            {lang === 'ES' ? 'Chat en WhatsApp' : 'WhatsApp us'}
+          </span>
+          <a
+            href="https://wa.me/923061308197"
+            target="_blank"
+            rel="noreferrer"
+            aria-label="Chat on WhatsApp"
+            className="wa-pulse w-14 h-14 rounded-full bg-[#25d366] hover:bg-[#1ebe5d] active:scale-95 flex items-center justify-center shadow-xl transition-all duration-200"
+          >
+            <WhatsAppIcon size={28} />
+          </a>
+        </div>
+
+        {/* ── Chat toggle button ── */}
         <button
           onClick={() => { setOpen(!open); setMinimised(false) }}
           aria-label={open ? 'Close chat' : 'Open chat'}
